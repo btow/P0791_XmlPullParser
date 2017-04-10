@@ -7,8 +7,10 @@ import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
+import java.io.StringReader;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,7 +74,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private XmlPullParser prepareXpp() {
-        return getResources().getXml(R.xml.data);
+    private XmlPullParser prepareXpp() throws XmlPullParserException {
+        //Получение данных из ресурса xml
+//        return getResources().getXml(R.xml.data);
+        //Получение xml-фабрики
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        //Включение поддержки namespace, которая выключена по умолчанию
+        factory.setNamespaceAware(true);
+        //Создание парсера
+        XmlPullParser xmlPullParser = factory.newPullParser();
+        //Подача на вход парсеру Reader
+        xmlPullParser.setInput(new StringReader(
+                "<data><phone><company>Samsung</company></phone></data>"
+        ));
+        return xmlPullParser;
     }
 }
